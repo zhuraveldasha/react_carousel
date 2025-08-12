@@ -21,9 +21,12 @@ export const Carousel: React.FC<Props> = ({
   const [offset, setOffset] = useState(0);
   const frameWidth = frameSize * itemWidth;
 
+  const canScroll = images.length > frameSize;
+
   const maxOffset = (images.length - frameSize) * itemWidth;
-  const isPrevDisabled = !infinite && offset === 0;
-  const isNextDisabled = !infinite && offset >= maxOffset;
+
+  const isPrevDisabled = !canScroll || (!infinite && offset === 0);
+  const isNextDisabled = !canScroll || (!infinite && offset >= maxOffset);
 
   const handleNextClick = () => {
     const newOffset = offset + step * itemWidth;
