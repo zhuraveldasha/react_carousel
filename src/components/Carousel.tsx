@@ -18,18 +18,19 @@ export const Carousel: React.FC<Props> = ({
   animationDuration = 1000,
   infinite = false,
 }) => {
+  const safeFrameSize = Math.max(1, frameSize);
+  const safeStep = Math.max(1, step);
+
   const [offset, setOffset] = useState(0);
-  const frameWidth = frameSize * itemWidth;
+  const frameWidth = safeFrameSize * itemWidth;
 
-  const canScroll = images.length > frameSize;
-
-  const maxOffset = (images.length - frameSize) * itemWidth;
-
+  const maxOffset = (images.length - safeFrameSize) * itemWidth;
+  const canScroll = images.length > safeFrameSize;
   const isPrevDisabled = !canScroll || (!infinite && offset === 0);
   const isNextDisabled = !canScroll || (!infinite && offset >= maxOffset);
 
   const handleNextClick = () => {
-    const newOffset = offset + step * itemWidth;
+    const newOffset = offset + safeStep * itemWidth;
 
     if (infinite) {
       setOffset(newOffset > maxOffset ? 0 : newOffset);
@@ -39,7 +40,7 @@ export const Carousel: React.FC<Props> = ({
   };
 
   const handlePrevClick = () => {
-    const newOffset = offset - step * itemWidth;
+    const newOffset = offset - safeStep * itemWidth;
 
     if (infinite) {
       setOffset(newOffset < 0 ? maxOffset : newOffset);
