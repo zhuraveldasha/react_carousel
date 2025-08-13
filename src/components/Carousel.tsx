@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Carousel.scss';
 
 interface Props {
@@ -24,10 +24,16 @@ export const Carousel: React.FC<Props> = ({
   const [offset, setOffset] = useState(0);
   const frameWidth = safeFrameSize * itemWidth;
 
-  const maxOffset = (images.length - safeFrameSize) * itemWidth;
   const canScroll = images.length > safeFrameSize;
+  const maxOffset = (images.length - safeFrameSize) * itemWidth;
   const isPrevDisabled = !canScroll || (!infinite && offset === 0);
   const isNextDisabled = !canScroll || (!infinite && offset >= maxOffset);
+
+  useEffect(() => {
+    if (offset > maxOffset) {
+      setOffset(maxOffset);
+    }
+  }, [images, safeFrameSize, itemWidth, offset, maxOffset]);
 
   const handleNextClick = () => {
     const newOffset = offset + safeStep * itemWidth;
